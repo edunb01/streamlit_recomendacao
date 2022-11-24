@@ -93,7 +93,9 @@ st.write("Nessa primeira versão online podemos escolher o número de uma linha 
 dados = X_test.reset_index()
 #st.dataframe(dados)
 
-selected_indices = st.selectbox('Select rows:', dados.index,index=0)
+with st.sidebar:
+    st.image('./header.png')
+    selected_indices = st.selectbox('Select rows:', dados.index,index=0)
 
 
 
@@ -108,3 +110,10 @@ y_pred_proba = model.predict(X_test_proc)
 recomendados = le.classes_[np.argsort(y_pred_proba[selected_indices,:])[-5:]]
 st.subheader("Serviços recomendados")
 st.table(recomendados)
+aleatorios = np.random.randint(0,len(le.classes_),2)
+
+def header(elementos):
+     st.write(f'<p style="color:#33ff33;font-size:18px;border-radius:2%;">{elementos}</p>', unsafe_allow_html=True)
+
+header(le.classes_[aleatorios[0]])
+header(le.classes_[aleatorios[1]])
