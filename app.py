@@ -99,10 +99,10 @@ model = keras.models.load_model('./data/ModeloNN/ModeloRedeNeural')
 
 st.header("Valor X de teste")
 st.table(X_test.iloc[selected_indices,:])
-st.header("Valor de Y Verdadeiro")
+st.header("Serviço Y Verdadeiro")
 st.write(y_test[selected_indices])
 
 y_pred_proba = model.predict(X_test_proc)
 recomendados = le.classes_[np.argsort(y_pred_proba[selected_indices,:])[-5:]]
-st.subheader("Valores recomendados")
+st.subheader("Serviços recomendados")
 st.table(recomendados)
