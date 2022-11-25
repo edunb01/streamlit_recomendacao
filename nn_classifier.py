@@ -118,7 +118,6 @@ categoricas = ['region','device','platform','source', 'ultimo_servico']
 dicionario = dict()
 for i in range(len(categoricas)):
     dicionario[categoricas[i]] = list(X_train[categoricas[i]].unique())
-    print("____________________________________")
 
 numericas_datas = ['date', 'dias_entre_solicitações', 'dia_primeiro_acesso']
 for i in range(len(numericas_datas)):
@@ -130,8 +129,8 @@ import json
 with open("./data/dicionario_categoricas.json", "w") as write_file:
     json.dump(dicionario, write_file, indent=4)
 
-with open("./data/dicionario_categoricas.json", "r") as read_content:
-    print(json.load(read_content))
+# with open("./data/dicionario_categoricas.json", "r") as read_content:
+#     print(json.load(read_content))
 
 
 

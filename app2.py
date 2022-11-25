@@ -63,19 +63,20 @@ colunas = ['region','date','device','platform','source', 'dias_entre_solicitaç�
 with open("./data/dicionario_categoricas.json", "r") as read_content:
     dicionario = (json.load(read_content))
 
-region = st.selectbox('Escolha a Região:', dicionario['region'],index=0)
-device = st.selectbox('Escolha o aparelho:', dicionario['device'],index=0)
-platform = st.selectbox('Escolha a plataforma:', dicionario['platform'],index=0)
-source = st.selectbox('Escolha a source:', dicionario['source'],index=0)
-ultimo = st.selectbox('Escolha o último serviço:', dicionario['ultimo_servico'],index=0)
-date = st.date_input("data do serviço", value=dt.date.fromisoformat(dicionario['date'][0]),
-                     min_value=dt.date.fromisoformat(dicionario['date'][0]),
-                     max_value=dt.date.fromisoformat(dicionario['date'][1]),key='data')
-
-dias_entre = st.number_input("Escolha o número de dias entre solicitações", min_value=int(dicionario['dias_entre_solicitações'][0]), max_value=int(dicionario['dias_entre_solicitações'][1]), value=1)
-dia_primeiro_acesso = st.date_input("Escolha a data do primeiro acesso", value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
-                     min_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
-                     max_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][1]),key='dia_primeiro_acesso')
+with st.sidebar:
+    st.image('./header.png')
+    region = st.selectbox('Escolha a Região:', dicionario['region'],index=0)
+    device = st.selectbox('Escolha o aparelho:', dicionario['device'],index=0)
+    platform = st.selectbox('Escolha a plataforma:', dicionario['platform'],index=0)
+    source = st.selectbox('Escolha a source:', dicionario['source'],index=0)
+    ultimo = st.selectbox('Escolha o último serviço:', dicionario['ultimo_servico'],index=4)
+    dias_entre = st.number_input("Escolha o número de dias entre solicitações", min_value=int(dicionario['dias_entre_solicitações'][0]), max_value=int(dicionario['dias_entre_solicitações'][1]), value=1)
+    date = st.date_input("data do serviço", value=dt.date.fromisoformat(dicionario['date'][0]),
+                        min_value=dt.date.fromisoformat(dicionario['date'][0]),
+                        max_value=dt.date.fromisoformat(dicionario['date'][1]),key='data')
+    dia_primeiro_acesso = st.date_input("Escolha a data do primeiro acesso", value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
+                        min_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
+                        max_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][1]),key='dia_primeiro_acesso')
 
 X_novo = pd.DataFrame(columns = colunas)
 X_novo.loc[0] = [region,date,device,platform,source,dias_entre,ultimo,dia_primeiro_acesso]
@@ -87,27 +88,17 @@ objectRep = open("./data/label_encoder.pickle", "rb")
 le = pickle.load(objectRep)
 objectRep.close()
 y_pred_proba = model.predict(preprocess_pipe.transform(X_novo))
-servicos_preditos = le.inverse_transform(list(reversed(np.argsort(y_pred_proba,1)[0][-5:])))
+recomendacoes = le.inverse_transform(list(reversed(np.argsort(y_pred_proba,1)[0][-6:])))
 
 # servicos_observados = le.inverse_transform(np.apply_along_axis(np.argmax,1,y_test_cat))
 
-st.header("Recomendações de serviço")
-st.table(servicos_preditos)
-# st.write("Nessa primeira versão online podemos escolher o número de uma linha do X teste e ver os valores preditos")
-
-# with st.sidebar:
-#     st.image('./header.png')
-#     selected_indices = st.selectbox('Select rows:', dados.index,index=0)
-
-
-
-
-
+st.header("Serviços Recomendados")
 
 aleatorios = np.random.randint(0,len(le.classes_),2)
+recomendacoes = np.append(recomendacoes,le.inverse_transform(aleatorios))
 
-def header(elementos):
+def exibe_como_link(elementos):
      for i in elementos:
-        st.markdown(f'<p style="color:#33ff33;font-size:18px;border-radius:2%;">{i}</p>', unsafe_allow_html=True)
+        st.markdown(f'<a href="https://www.gov.br{i}">{i[16:]}</a>', unsafe_allow_html=True)
 
-header(le.inverse_transform(aleatorios))
+exibe_como_link(recomendacoes)
