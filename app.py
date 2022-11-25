@@ -85,6 +85,8 @@ y_test_cat = to_categorical(y_test_le)
 X_train_proc = preprocess_pipe.fit_transform(X_train)
 X_test_proc = preprocess_pipe.transform(X_test)
 
+model = keras.models.load_model('./data/ModeloNN/ModeloRedeNeural')
+
 
 st.header("Recomendações de serviço")
 
@@ -99,7 +101,7 @@ with st.sidebar:
 
 
 
-model = keras.models.load_model('./data/ModeloNN/ModeloRedeNeural')
+
 
 st.header("Valor X de teste")
 st.table(X_test.iloc[selected_indices,:])
