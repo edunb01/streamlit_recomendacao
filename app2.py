@@ -141,7 +141,7 @@ le = pickle.load(objectRep)
 objectRep.close()
 y_pred_proba = model.predict(preprocess_pipe.transform(X_novo))
 #servicos_preditos = le.inverse_transform(np.argsort(y_pred_proba,1)[-5:])
-st.table(y_pred_proba)
+st.table(argsort(y_pred_proba,1))
 # servicos_observados = le.inverse_transform(np.apply_along_axis(np.argmax,1,y_test_cat))
 
 # st.header("Recomendações de serviço")
