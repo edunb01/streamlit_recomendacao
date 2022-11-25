@@ -21,7 +21,7 @@ from sklearn.impute import SimpleImputer
 
 # Deep Learning
 from tensorflow import keras
-from tensorflow.keras.utils import to_categorical
+# from tensorflow.keras.utils import to_categorical
 
 
 def date_transform(data: pd.DataFrame):
@@ -87,7 +87,7 @@ objectRep = open("./data/label_encoder.pickle", "rb")
 le = pickle.load(objectRep)
 objectRep.close()
 y_pred_proba = model.predict(preprocess_pipe.transform(X_novo))
-servicos_preditos = le.inverse_transform(np.argsort(y_pred_proba,1)[0][-5:])
+servicos_preditos = le.inverse_transform(list(reversed(np.argsort(y_pred_proba,1)[0][-5:])))
 
 # servicos_observados = le.inverse_transform(np.apply_along_axis(np.argmax,1,y_test_cat))
 
