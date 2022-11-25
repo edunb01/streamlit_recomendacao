@@ -140,8 +140,8 @@ objectRep = open("./data/label_encoder.pickle", "rb")
 le = pickle.load(objectRep)
 objectRep.close()
 y_pred_proba = model.predict(preprocess_pipe.transform(X_novo))
-servicos_preditos = le.inverse_transform(np.apply_along_axis(np.argmax,1,y_pred_proba))
-st.write(servicos_preditos)
+servicos_preditos = le.inverse_transform(np.argsort(y_pred_proba)[-5:])
+st.table(servicos_preditos)
 # servicos_observados = le.inverse_transform(np.apply_along_axis(np.argmax,1,y_test_cat))
 
 # st.header("Recomendações de serviço")
@@ -159,8 +159,8 @@ st.write(servicos_preditos)
 
 
 
-st.header("Valor X de teste")
-st.dataframe(X_novo)
+# st.header("Valor X de teste")
+# st.dataframe(X_novo)
 # st.table(X_test.iloc[selected_indices,:])
 # st.header("Serviço Y Verdadeiro")
 # st.write(y_test[selected_indices])
