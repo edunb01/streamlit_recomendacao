@@ -116,17 +116,17 @@ colunas = ['region','date','device','platform','source', 'dias_entre_solicitaç�
 with open("./data/dicionario_categoricas.json", "r") as read_content:
     dicionario = (json.load(read_content))
 
-region = st.selectbox('Select rows:', dicionario['region'],index=0)
-device = st.selectbox('Select rows:', dicionario['device'],index=0)
-platform = st.selectbox('Select rows:', dicionario['platform'],index=0)
-source = st.selectbox('Select rows:', dicionario['source'],index=0)
-ultimo = st.selectbox('Select rows:', dicionario['ultimo_servico'],index=0)
+region = st.selectbox('Escolha a Região:', dicionario['region'],index=0)
+device = st.selectbox('Escolha o aparelho:', dicionario['device'],index=0)
+platform = st.selectbox('Escolha a plataforma:', dicionario['platform'],index=0)
+source = st.selectbox('Escolha a source:', dicionario['source'],index=0)
+ultimo = st.selectbox('Escolha o último serviço:', dicionario['ultimo_servico'],index=0)
 date = st.date_input("data do serviço", value=dt.date.fromisoformat(dicionario['date'][0]),
                      min_value=dt.date.fromisoformat(dicionario['date'][0]),
                      max_value=dt.date.fromisoformat(dicionario['date'][1]),key='data')
 
-dias_entre = st.number_input("escolha", min_value=int(dicionario['dias_entre_solicitações'][0]), max_value=int(dicionario['dias_entre_solicitações'][1]), value=1)
-dia_primeiro_acesso = st.date_input("data do serviço", value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
+dias_entre = st.number_input("Escolha o número de dias entre solicitações", min_value=int(dicionario['dias_entre_solicitações'][0]), max_value=int(dicionario['dias_entre_solicitações'][1]), value=1)
+dia_primeiro_acesso = st.date_input("Escolha a data do primeiro acesso", value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
                      min_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
                      max_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][1]),key='dia_primeiro_acesso')
 
