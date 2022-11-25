@@ -26,8 +26,6 @@ from tensorflow import keras
 
 def date_transform(data: pd.DataFrame):
 
-    data['month'] = data['date'].apply(lambda x: int(str(x)[4:6]))
-
     dt_datetime = pd.to_datetime(
         data['date'],
         format="%Y-%m-%d")
@@ -36,6 +34,7 @@ def date_transform(data: pd.DataFrame):
         data['dia_primeiro_acesso'],
         format="%Y-%m-%d")
 
+    data['month'] = dt_datetime.dt.month
     data['day'] = dt_datetime.dt.weekday + 1 # segunda = 1 e domingo = 7
     data['dias_de_uso'] = (dt_datetime - primeiro_acesso_datetime).dt.days
 
@@ -57,7 +56,6 @@ def bin_dias_solicitações(data: pd.DataFrame):
 
     return data
 
-
 colunas = ['region','date','device','platform','source', 'dias_entre_solicitações', 'ultimo_servico', 'dia_primeiro_acesso']
 
 with open("./data/dicionario_categoricas.json", "r") as read_content:
@@ -65,15 +63,16 @@ with open("./data/dicionario_categoricas.json", "r") as read_content:
 
 with st.sidebar:
     st.image('./header.png')
-    region = st.selectbox('Escolha a Região:', dicionario['region'],index=0)
-    device = st.selectbox('Escolha o aparelho:', dicionario['device'],index=0)
-    platform = st.selectbox('Escolha a plataforma:', dicionario['platform'],index=0)
-    source = st.selectbox('Escolha a source:', dicionario['source'],index=0)
     ultimo = st.selectbox('Escolha o último serviço:', dicionario['ultimo_servico'],index=4)
-    dias_entre = st.number_input("Escolha o número de dias entre solicitações", min_value=int(dicionario['dias_entre_solicitações'][0]), max_value=int(dicionario['dias_entre_solicitações'][1]), value=1)
+    source = st.selectbox('Escolha a source:', dicionario['source'],index=0)
     date = st.date_input("data do serviço", value=dt.date.fromisoformat(dicionario['date'][0]),
                         min_value=dt.date.fromisoformat(dicionario['date'][0]),
                         max_value=dt.date.fromisoformat(dicionario['date'][1]),key='data')
+    region = st.selectbox('Escolha a Região:', dicionario['region'],index=0)
+    device = st.selectbox('Escolha o aparelho:', dicionario['device'],index=0)
+    platform = st.selectbox('Escolha a plataforma:', dicionario['platform'],index=0)
+    dias_entre = st.number_input("Escolha o número de dias entre solicitações", min_value=int(dicionario['dias_entre_solicitações'][0]), max_value=int(dicionario['dias_entre_solicitações'][1]), value=1)
+
     dia_primeiro_acesso = st.date_input("Escolha a data do primeiro acesso", value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
                         min_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][0]),
                         max_value=dt.date.fromisoformat(dicionario['dia_primeiro_acesso'][1]),key='dia_primeiro_acesso')
